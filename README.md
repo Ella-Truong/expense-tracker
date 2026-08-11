@@ -1,2 +1,1 @@
-# expense-tracker
-A full-stack expense tracker built to explore backend development, databases, containerization, VPS infrastructure, logging, and CI/CD
+A full-stack expense tracker built to explore backend development, databases, containerization, VPS infrastructure, logging, and CI/CD.

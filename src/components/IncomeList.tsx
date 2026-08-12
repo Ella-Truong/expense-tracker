@@ -1,9 +1,4 @@
-type Income = {
-  id: number;
-  amount: string;
-  note: string | null;
-  date: string;
-};
+import { Income } from "@/types/finance";
 
 type Props = {
   incomes: Income[];

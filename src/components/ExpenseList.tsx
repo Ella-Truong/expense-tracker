@@ -1,10 +1,4 @@
-type Expense = {
-  id: number;
-  amount: string;
-  category: string;
-  note: string | null;
-  date: string;
-};
+import { Expense } from "@/types/finance";
 
 type Props = {
   expenses: Expense[];
@@ -28,18 +22,36 @@ export default function ExpenseList({
           {expenses.map((expense) => (
             <div
               key={expense.id}
-              className="flex justify-between border-2 border-[#3b2a1a] bg-[#e8d7ad] p-3"
+              className="flex items-center justify-between border-2 border-[#3b2a1a] bg-[#e8d7ad] p-3"
             >
-              <span>
-                {expense.category} — ${expense.amount}
-              </span>
+              <div>
+                <p className="font-black">
+                  {expense.category}
+                </p>
 
-              <button
-                onClick={() => onDelete(expense.id)}
-                className="border-2 border-[#3b2a1a] bg-[#c96b5c] px-3 py-1 font-bold"
-              >
-                DELETE
-              </button>
+                {expense.note && (
+                  <p className="text-sm">
+                    {expense.note}
+                  </p>
+                )}
+
+                <p className="text-xs font-bold opacity-70">
+                  {new Date(expense.date).toLocaleDateString()}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className="font-black">
+                  ${expense.amount}
+                </span>
+
+                <button
+                  onClick={() => onDelete(expense.id)}
+                  className="border-2 border-[#3b2a1a] bg-[#c96b5c] px-3 py-1 font-bold"
+                >
+                  DELETE
+                </button>
+              </div>
             </div>
           ))}
         </div>

@@ -16,7 +16,7 @@ export async function GET() {
 
         prisma.expense.aggregate({
           _sum: {
-            amount: true,
+            amount: true, 
           },
         }),
 

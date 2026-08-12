@@ -11,3 +11,19 @@ export type ExpenseInput = {
     category: string;
     date: string;
 }
+
+
+export type Income = {
+  id: number;
+  amount: string;
+  note: string | null;
+  date: string;
+};
+
+export type Expense = {
+  id: number;
+  amount: string;
+  category: string;
+  note: string | null;
+  date: string;
+};

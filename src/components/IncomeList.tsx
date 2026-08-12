@@ -1,12 +1,12 @@
 import { Income } from "@/types/finance";
 
 type Props = {
-  incomes: Income[];
+  incomes?: Income[];
   onDelete: (id: number) => Promise<void>;
 };
 
 export default function IncomeList({
-  incomes,
+  incomes = [],
   onDelete,
 }: Props) {
   return (

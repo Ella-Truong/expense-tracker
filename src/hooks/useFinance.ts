@@ -27,6 +27,7 @@ export function useFinance() {
       expenseRes.json(),
     ]);
 
+
     setDashboard(dashboardData);
     setIncomes(incomeData);
     setExpenses(expenseData);

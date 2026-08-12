@@ -7,9 +7,9 @@ type Props = {
 export default function Dashboard({ dashboard }: Props) {
   return (
     <section className="grid gap-4 sm:grid-cols-3">
-      <Stat label="💰 INCOME" value={dashboard.totalIncome} />
-      <Stat label="💸 SPENT" value={dashboard.totalExpense} />
-      <Stat label="🪙 BALANCE" value={dashboard.balance} />
+      <Stat label="💰 INCOME" value={dashboard?.totalIncome ?? 0} />
+      <Stat label="💸 SPENT" value={dashboard?.totalExpense ?? 0} />
+      <Stat label="🪙 BALANCE" value={dashboard?.balance ?? 0} />
     </section>
   );
 }

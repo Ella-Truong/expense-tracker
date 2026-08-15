@@ -21,6 +21,6 @@ jobs:
 
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
 
-          ssh -v -i ~/.ssh/expense_tracker_deploy \
+          ssh -i ~/.ssh/expense_tracker_deploy \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             'cd ~/expense-tracker && git pull origin main && docker compose up -d --build && docker compose exec -T app npx prisma migrate deploy'

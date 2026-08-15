@@ -15,11 +15,12 @@ jobs:
       - name: Deploy to VPS
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/expense_tracker_deploy
+
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/expense_tracker_deploy
           chmod 600 ~/.ssh/expense_tracker_deploy
 
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
 
-          ssh -i ~/.ssh/expense_tracker_deploy \
+          ssh -v -i ~/.ssh/expense_tracker_deploy \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             'cd ~/expense-tracker && git pull origin main && docker compose up -d --build && docker compose exec -T app npx prisma migrate deploy'

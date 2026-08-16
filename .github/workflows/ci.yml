@@ -1,5 +1,9 @@
+# name of entire CI workflow - shown in GitHub Actions
 name: CI
 
+# WHEN CI RUN ?
+# when code is pushed to the main branch
+# or a pull request targets to the main branch
 on:
   push:
     branches:
@@ -8,28 +12,50 @@ on:
     branches:
       - main
 
+# WHAT CI JOBS ?
 jobs:
+  # name of this job - shown in CI workflow run
   ci:
+    # GitHub creates a temporary Ubuntu machine to run this job
     runs-on: ubuntu-latest
 
     steps:
+       # step 1: checkout the repository
+       # download the repository code onto GitHub Actions runner 
+       # so following steps can use the project files
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # step 2: setup Node.js
+      # install/configure Node.js 22 on the GitHub Actions runner 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+          # enable npm dependency caching to make future workflow run faster
           cache: npm
 
+      # step 3: install dependencies
+      # npm ci installs exact dependency versions from package.json
+      # this is useful for CI because we want to a cleam, predictable installation
       - name: Install dependencies
         run: npm ci
 
+      # step 4: Lint
+      # chekc the code for ESlint errors/problems
+      # if this fails, the CI jobs stops and CI is marked as failed
       - name: Lint
         run: npm run lint
       
+      # step 5: generate Prisma Client
+      # this is required by application
+      # GitHub's runner starts fresh, so the generated Prisma files don't already exist
       - name: Generate Prisma Client
         run: npx prisma generate
-
+ 
+      # step 6: build application
+      # build Next.js production application
+      # this verifies that the application can successfully compile for production
       - name: Build
         run: npm run build

@@ -7,7 +7,7 @@ on:
     # CI must finish before CD is triggered
     workflows: ["CI"]
 
-    # 'completed' doesn NOT necessarily mean CI succeeded
+    # 'completed' doesn't NOT necessarily mean CI succeeded
     types:
       - completed
 
@@ -22,7 +22,7 @@ permissions:
 jobs:
   deploy:
     # workflow_run with 'completed' also triggers when CI fails
-    # Only continue with CD if CI actually succeeded,
+    # Only continue with CD if CI actually succeeded
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     # GitHub provides a temporary Ubuntu machine to run this job

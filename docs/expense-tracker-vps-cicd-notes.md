@@ -756,21 +756,5 @@ How does public HTTP traffic reach my application?
 
 ------------------------------------------------------------------------
 
-# 20. Interview Explanation
-
-If asked:
-
-> **"How is your Expense Tracker deployed?"**
-
-You can explain:
-
-> "I deployed the application to a self-managed DigitalOcean VPS. GitHub
-> Actions runs CI first to lint and build the application. If CI
-> succeeds, the CD workflow builds the Docker image and pushes it to
-> GitHub Container Registry. It then uses a dedicated SSH deployment key
-> to connect to the VPS, pulls the new image, starts the application
-> with Docker Compose, and runs Prisma migrations. Nginx acts as the
-> reverse proxy in front of the application."
-
 The important skill is **understanding the flow**, not memorizing the
 YAML syntax.

@@ -1,43 +1,75 @@
+# name of entire CD workflow - shown in GitHub Actions
 name: CD
 
 on:
   workflow_run:
+    # CD depends on the CI workflow
+    # CI must finish before CD is triggered
     workflows: ["CI"]
+
+    # 'completed' doesn NOT necessarily mean CI succeeded
     types:
       - completed
 
 permissions:
+  # Allow this workflow to read repository content
   contents: read
+
+  # Allow this workflow to push Docker images to GitHub
+  # Container Registry (GHCR)
   packages: write
 
 jobs:
   deploy:
+    # workflow_run with 'completed' also triggers when CI fails
+    # Only continue with CD if CI actually succeeded,
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    # GitHub provides a temporary Ubuntu machine to run this job
     runs-on: ubuntu-latest
 
     steps:
+      # step 1: check out the repository
+      # Download the source code from GitHub onto the temporary GitHub Action runner
       - name: Checkout repository
         uses: actions/checkout@v4
+
+        # checkout the exact branch/commit that CI tested
+        # this helps make sure CD deploys the same code
+        # that successfully passed CI
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
 
+      # step 2: log in to GitHub Container Registry
+      # GHCR stores Docker images
+      # we authenticate so GitHub Actions is allowed to push our Docker image to GHCR
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
+          # GitHub Container Registry address
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # step 3: build the Docker image
+      # Build Docker image using Dockerfile in the repository
+      # The image will be tagged as: ghcr.io/ella-truong-tracker:latest
+      # 'latest' is the image tag
       - name: Build Docker image
         run: |
           docker build \
             -t ghcr.io/ella-truong/expense-tracker:latest \
             .
-
+      
+      # step 4: push the Docker image to GHCR
+      # Upload the Docker image that we just built to GHCR
+      # The VPS will later pull this image
       - name: Push Docker image
         run: |
           docker push ghcr.io/ella-truong/expense-tracker:latest
 
+      # step 5: deploy the image to VPS
+      # Connect to the VPS using SSH and tell Docker Compose to pull and run the new image
       - name: Deploy to VPS
         run: |
           mkdir -p ~/.ssh
